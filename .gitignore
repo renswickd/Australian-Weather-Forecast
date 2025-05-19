@@ -1,0 +1,10 @@
+.env
+logs/
+*.egg-info/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+gcp-key*.json
+artifacts/
+test.py
+test/
