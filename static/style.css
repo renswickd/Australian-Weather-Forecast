@@ -1,0 +1,123 @@
+/* Global Reset and Fonts */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom, #4a90e2, #1c3d6e);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;       /* ✅ Allows vertical scrolling */
+    overflow-x: hidden;
+    position: relative;
+    padding: 2rem 0;        /* Optional: Add padding for spacing on smaller screens */
+}
+
+/* Container */
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem 3rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(12px);
+    color: #fff;
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+    z-index: 2;
+}
+
+/* Heading */
+h1 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #e0f7ff;
+}
+
+/* Form Inputs */
+.form-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #d0eaff;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 8px;
+    border: none;
+    background: #e6f0fa;
+    color: #1c3d6e;
+    font-size: 1rem;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(72, 165, 255, 0.4);
+}
+
+/* Button */
+button {
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    background-color: #3b82f6;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #2563eb;
+}
+
+/* Prediction Box */
+.prediction-box {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: #e0f7ff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Rain Animation */
+.rain {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.drop {
+    position: absolute;
+    bottom: 100%;
+    width: 2px;
+    height: 15px;
+    background: rgba(255, 255, 255, 0.4);
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh);
+    }
+}
+
+/* Generate multiple drops dynamically in JS */
