@@ -1,0 +1,51 @@
+name: CI/CD Deployment Workflow to Google Kuubernetes Cluster
+on: 
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GKE_CLUSTER: "kb-cluster-aus-forecast"
+  GKE_REGION: "us-central1"
+  DEPLOYMENT_NAME: "mlops-app"
+  REPOSITORY: "us-central1-docker.pkg.dev/instant-icon-457207-s8/my-repo"
+  IMAGE: "us-central1-docker.pkg.dev/instant-icon-457207-s8/my-repo/mlops-app"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    container:
+      image: google/cloud-sdk:latest
+      options: --user root
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+        project_id: ${{ env.PROJECT_ID }}
+
+    - name: Configure GCloud
+      run: |
+        gcloud config set project ${{ env.PROJECT_ID }}
+        gcloud auth configure-docker us-central1-docker.pkg.dev
+
+    - name: Build and Push Docker image
+      run: |
+        docker build -t $IMAGE:$GITHUB_SHA .
+        docker push $IMAGE:$GITHUB_SHA
+
+    - name: Google Kubernetes Engine Cluster Configuration
+      run: |
+        gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --region ${{ env.GKE_REGION }} --project ${{ env.PROJECT_ID }}
+
+    - name: Deploy to GKE
+      run: |
+        kubectl apply -f kubernetes-deployment.yaml
+        kubectl set image deployment/${{ env.DEPLOYMENT_NAME }} $DEPLOYMENT_NAME=$IMAGE:$GITHUB_SHA
+        kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
